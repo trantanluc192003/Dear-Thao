@@ -2,20 +2,19 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dear Thảo</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      background: #fffaf0;
       font-family: 'Courier New', Courier, monospace;
-      background-color: #fffaf0;
+      overflow: hidden;
     }
-    #intro {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+    #startScreen {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
       background-color: #fffaf0;
       display: flex;
       justify-content: center;
@@ -23,139 +22,129 @@
       flex-direction: column;
       z-index: 10;
     }
-    #intro img {
-      max-width: 300px;
+    #startScreen img {
+      width: 200px;
+      margin-bottom: 20px;
     }
-    #intro button {
-      margin-top: 20px;
+    #startBtn {
       padding: 10px 20px;
-      font-size: 1.2rem;
-      background-color: pink;
+      font-size: 18px;
       border: none;
       border-radius: 10px;
+      background: pink;
       cursor: pointer;
     }
-    #main {
+
+    #content {
       display: none;
-      width: 100%;
       height: 100vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 40px;
+      box-sizing: border-box;
       position: relative;
-      overflow: hidden;
     }
-    #letter {
-      position: absolute;
-      top: 50px;
-      left: 50px;
-      width: 45%;
+
+    #message {
+      width: 50%;
       color: deeppink;
-      font-size: 1.2rem;
-      white-space: pre-wrap;
+      white-space: pre-line;
+      font-size: 20px;
     }
-    canvas {
-      position: absolute;
-      right: 0;
-      bottom: 0;
+
+    #treeContainer {
+      width: 50%;
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: end;
     }
-    .falling-heart {
+
+    #heartTree {
+      height: 80vh;
+      z-index: 1;
+    }
+
+    .fallingHeart {
       position: absolute;
-      width: 24px;
-      height: 24px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/4/4f/Font_Awesome_5_regular_heart.svg') no-repeat center center;
-      background-size: cover;
-      pointer-events: none;
-      z-index: 2;
+      font-size: 18px;
+      animation: fall 4s linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(600px); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div id="intro">
-    <img src="tim.png" alt="Heart">
-    <button onclick="startStory()">Click here</button>
+
+<div id="startScreen">
+  <img src="tim.png" alt="Heart">
+  <button id="startBtn">Click here</button>
+</div>
+
+<div id="content">
+  <div id="message"></div>
+  <div id="treeContainer">
+    <img src="caytim.png" id="heartTree" alt="Heart Tree">
   </div>
+</div>
 
-  <div id="main">
-    <canvas id="treeCanvas" width="800" height="600"></canvas>
-    <div id="letter"></div>
-  </div>
+<script>
+  const message = `Thảo à,
 
-  <script>
-    const letterText = `Thảo à,
-
-Tớ có một điều muốn nói với cậu từ lâu rồi...
+Tớ có một điều muốn nói với cậu từ lâu rồi…
 Tớ thích cậu, không chỉ một chút, mà là rất nhiều.
 
 Mỗi khi cậu cười, cả thế giới như sáng bừng lên trong mắt tớ.
 
 Tớ không biết tương lai ra sao, nhưng tớ muốn được cùng cậu viết nên nó.
 
-Cậu đồng ý làm người yêu tớ nhé? 💖`;
+Cậu đồng ý làm người yêu tớ nhé? 💗`;
 
-    function startStory() {
-      document.getElementById('intro').style.display = 'none';
-      document.getElementById('main').style.display = 'block';
-      drawTree();
-      typeText();
-      setInterval(spawnFallingHeart, 3000);
+  const startScreen = document.getElementById('startScreen');
+  const content = document.getElementById('content');
+  const startBtn = document.getElementById('startBtn');
+  const messageBox = document.getElementById('message');
+
+  startBtn.onclick = () => {
+    startScreen.style.display = 'none';
+    content.style.display = 'flex';
+    typeWriter(message, 0);
+    setInterval(() => createFallingHeart(), 3000 + Math.random() * 2000);
+  };
+
+  function typeWriter(text, i) {
+    if (i < text.length) {
+      messageBox.innerHTML += text.charAt(i);
+      setTimeout(() => typeWriter(text, i + 1), 50);
     }
+  }
 
-    function typeText() {
-      const el = document.getElementById('letter');
-      let i = 0;
-      const speed = 40;
-      function type() {
-        if (i < letterText.length) {
-          el.textContent += letterText.charAt(i);
-          i++;
-          setTimeout(type, speed);
-        }
-      }
-      type();
-    }
+  const colors = ['#ff69b4', '#ff1493', '#ffa07a', '#ff4500', '#8a2be2', '#1e90ff', '#ffff66'];
 
-    function drawTree() {
-      const canvas = document.getElementById('treeCanvas');
-      const ctx = canvas.getContext('2d');
+  function createFallingHeart() {
+    const tree = document.getElementById('heartTree');
+    const container = document.getElementById('treeContainer');
+    const rect = tree.getBoundingClientRect();
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#3e2723';
-      ctx.fillRect(680, 300, 20, 300);
+    const heart = document.createElement('div');
+    heart.className = 'fallingHeart';
+    heart.textContent = '♥';
+    heart.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 100}px`;
+    heart.style.top = `${rect.top + rect.height / 3}px`;
+    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+    heart.style.fontSize = `${14 + Math.random() * 10}px`;
 
-      const colors = ['#ff69b4', '#ff1493', '#ffcccb', '#ffd700', '#ff8c00'];
-      for (let i = 0; i < 150; i++) {
-        const x = 600 + Math.random() * 200;
-        const y = 100 + Math.random() * 200;
-        ctx.beginPath();
-        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.font = "20px sans-serif";
-        ctx.fillText("\u2665", x, y);
-      }
-    }
+    document.body.appendChild(heart);
 
-    function spawnFallingHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("falling-heart");
+    heart.addEventListener('animationend', () => {
+      heart.remove();
+    });
+  }
+</script>
 
-      const startX = 700 + Math.random() * 80;
-      const startY = 300;
-      heart.style.left = `${startX}px`;
-      heart.style.top = `${startY}px`;
-      document.body.appendChild(heart);
-
-      let x = startX;
-      let y = startY;
-      const angle = Math.PI / 4;
-      const speed = 1 + Math.random() * 1.5;
-      const interval = setInterval(() => {
-        x -= speed * Math.cos(angle);
-        y += speed * Math.sin(angle);
-        heart.style.left = `${x}px`;
-        heart.style.top = `${y}px`;
-        if (y > window.innerHeight) {
-          heart.remove();
-          clearInterval(interval);
-        }
-      }, 16);
-    }
-  </script>
 </body>
 </html>
