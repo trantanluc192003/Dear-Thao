@@ -77,6 +77,17 @@
       pointer-events: none;
       user-select: none;
     }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -114,7 +125,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
   startBtn.onclick = () => {
     startScreen.style.display = 'none';
     content.style.display = 'flex';
-    typeWriter(message, 0);
+    typeWriterWithPause(messageBox, message);
     setInterval(() => {
       const count = Math.floor(Math.random() * 3) + 1;
       for (let i = 0; i < count; i++) {
@@ -123,10 +134,20 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     }, 2500 + Math.random() * 2000);
   };
 
-  function typeWriter(text, i) {
-    if (i < text.length) {
-      messageBox.innerHTML += text.charAt(i);
-      setTimeout(() => typeWriter(text, i + 1), 40);
+  function typeWriterWithPause(element, text, i = 0) {
+    if (i <= text.length) {
+      element.innerHTML = text.substring(0, i) + '<span class="cursor">|</span>';
+      const char = text.charAt(i - 1);
+      let delay = 50;
+
+      if (char === ',' || char === '…') delay = 500 + Math.random() * 300;
+      else if (char === '.') delay = 700 + Math.random() * 400;
+      else if (char === '\n') delay = 600 + Math.random() * 300;
+      else if (char === '?') delay = 800 + Math.random() * 400;
+
+      setTimeout(() => typeWriterWithPause(element, text, i + 1), delay);
+    } else {
+      element.innerHTML = text; // Xoá con trỏ sau khi gõ xong
     }
   }
 
@@ -138,11 +159,9 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     heart.className = 'fallingHeart';
     heart.textContent = '♥';
 
-    // Vị trí bắt đầu ngẫu nhiên trên toàn bộ cây
     const startX = rect.left + Math.random() * rect.width;
     const startY = rect.top + Math.random() * rect.height;
 
-    // Lệch bay chéo sang trái
     const driftX = -200 + Math.random() * -150;
     const fallY = 600 + Math.random() * 100;
 
@@ -151,7 +170,6 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     heart.style.color = colors[Math.floor(Math.random() * colors.length)];
     heart.style.fontSize = `${40 + Math.random() * 20}px`;
 
-    // Hiệu ứng bay chéo
     heart.animate([
       { transform: 'translate(0, 0)', opacity: 1 },
       { transform: `translate(${driftX}px, ${fallY}px)`, opacity: 0 }
