@@ -4,221 +4,96 @@
   <meta charset="UTF-8">
   <title>Dear Thảo</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body {
-      width: 100%;
-      height: 100%;
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fffaf0;
+      font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
-      background: #fffaf0;
-      font-family: 'Courier New', monospace;
     }
-
-    #intro {
-      position: absolute;
-      width: 100%; height: 100%;
-      background: #fffaf0;
+    #startScreen {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      background-color: #fffaf0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      flex-direction: column;
       z-index: 10;
     }
-
-    #intro img {
+    #startScreen img {
       width: 200px;
-      animation: pulse 2s infinite;
+      margin-bottom: 20px;
     }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
     #startBtn {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 1.2rem;
-      background-color: #ff6fa0;
-      color: white;
+      padding: 10px 20px;
+      font-size: 18px;
       border: none;
       border-radius: 10px;
+      background: pink;
       cursor: pointer;
     }
 
-    #main {
-      display: flex;
-      width: 100%;
-      height: 100%;
+    #content {
       display: none;
-    }
-
-    #left {
-      width: 50%;
-      padding: 60px 40px;
+      height: 100vh;
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    #message {
-      font-size: 1.2rem;
-      color: #d63384;
-      white-space: pre-wrap;
-      max-width: 90%;
-    }
-
-    #right {
-      width: 50%;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 40px;
+      box-sizing: border-box;
       position: relative;
     }
 
-    canvas {
+    #message {
+      width: 50%;
+      color: deeppink;
+      white-space: pre-line;
+      font-size: 20px;
+    }
+
+    #treeContainer {
+      width: 50%;
+      position: relative;
+      display: flex;
+      align-items: end;
+      justify-content: end;
+    }
+
+    #heartTree {
+      height: 80vh;
+      z-index: 1;
+    }
+
+    .fallingHeart {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      font-size: 18px;
+      animation: fall 4s linear forwards;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(600px); opacity: 0; }
     }
   </style>
 </head>
 <body>
 
-<div id="intro">
-  <img src="tim.png" alt="heart">
+<div id="startScreen">
+  <img src="tim.png" alt="Heart">
   <button id="startBtn">Click here</button>
 </div>
 
-<div id="main">
-  <div id="left">
-    <div id="message"></div>
-  </div>
-  <div id="right">
-    <canvas id="canvas"></canvas>
+<div id="content">
+  <div id="message"></div>
+  <div id="treeContainer">
+    <img src="caytim.png" id="heartTree" alt="Heart Tree">
   </div>
 </div>
 
 <script>
-  const startBtn = document.getElementById("startBtn");
-  const intro = document.getElementById("intro");
-  const main = document.getElementById("main");
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  const messageEl = document.getElementById("message");
-
-  let W, H, treeLeaves = [], fallingLeaves = [];
-
-  function resizeCanvas() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-    W = canvas.width;
-    H = canvas.height;
-  }
-
-  window.addEventListener("resize", resizeCanvas);
-
-  class Leaf {
-    constructor(x, y, size, color, isFalling = false) {
-      this.x = x;
-      this.y = y;
-      this.size = size;
-      this.color = color;
-      this.isFalling = isFalling;
-      this.dy = 0;
-      this.dx = (Math.random() - 0.5) * 1.5;
-      this.angle = Math.random() * Math.PI * 2;
-      this.rotateSpeed = (Math.random() - 0.5) * 0.05;
-    }
-
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      let s = this.size;
-      ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(0, -s/2, -s, -s/2, -s, 0);
-      ctx.bezierCurveTo(-s, s/2, 0, s, 0, s*1.5);
-      ctx.bezierCurveTo(0, s, s, s/2, s, 0);
-      ctx.bezierCurveTo(s, -s/2, 0, -s/2, 0, 0);
-      ctx.fill();
-      ctx.restore();
-    }
-
-    update() {
-      if (this.isFalling) {
-        this.y += 1.2 + this.dy;
-        this.x += this.dx;
-        this.angle += this.rotateSpeed;
-      }
-    }
-  }
-
-  function drawTreeAndLeaves() {
-    ctx.clearRect(0, 0, W, H);
-
-    // Vẽ thân cây
-    ctx.save();
-    ctx.translate(W / 4 * 3, H); // góc dưới bên phải
-    ctx.fillStyle = "#3e2723";
-    ctx.beginPath();
-    ctx.moveTo(-10, 0);
-    ctx.lineTo(-5, -180);
-    ctx.lineTo(5, -180);
-    ctx.lineTo(10, 0);
-    ctx.closePath();
-    ctx.fill();
-
-    // Vẽ lá cây một lần
-    if (treeLeaves.length === 0) {
-      for (let i = 0; i < 200; i++) {
-        const x = W / 4 * 3 + (Math.random() - 0.5) * 250;
-        const y = H - 180 + (Math.random() - 1) * 200;
-        const size = 8 + Math.random() * 10;
-        const color = `hsl(${Math.random()*360}, 100%, 70%)`;
-        treeLeaves.push(new Leaf(x, y, size, color));
-      }
-    }
-
-    treeLeaves.forEach(leaf => leaf.draw());
-    ctx.restore();
-
-    // Vẽ lá đang rơi
-    fallingLeaves.forEach(leaf => {
-      leaf.update();
-      leaf.draw();
-    });
-
-    // Xóa lá đã rơi khỏi khung
-    fallingLeaves = fallingLeaves.filter(l => l.y < H + 50);
-  }
-
-  function animate() {
-    drawTreeAndLeaves();
-    requestAnimationFrame(animate);
-  }
-
-  function spawnFallingLeaf() {
-    if (treeLeaves.length === 0) return;
-    const base = treeLeaves[Math.floor(Math.random() * treeLeaves.length)];
-    const newLeaf = new Leaf(base.x, base.y, base.size, base.color, true);
-    fallingLeaves.push(newLeaf);
-  }
-
-  function typeWriter(text, i = 0) {
-    if (i < text.length) {
-      messageEl.innerHTML += text.charAt(i);
-      setTimeout(() => typeWriter(text, i + 1), 40);
-    }
-  }
-
-  startBtn.addEventListener("click", () => {
-    intro.style.display = "none";
-    main.style.display = "flex";
-    resizeCanvas();
-    animate();
-    setInterval(spawnFallingLeaf, 1200);
-
-    const msg = `Thảo à,
+  const message = `Thảo à,
 
 Tớ có một điều muốn nói với cậu từ lâu rồi…
 Tớ thích cậu, không chỉ một chút, mà là rất nhiều.
@@ -228,8 +103,47 @@ Mỗi khi cậu cười, cả thế giới như sáng bừng lên trong mắt t�
 Tớ không biết tương lai ra sao, nhưng tớ muốn được cùng cậu viết nên nó.
 
 Cậu đồng ý làm người yêu tớ nhé? 💗`;
-    setTimeout(() => typeWriter(msg), 1500);
-  });
+
+  const startScreen = document.getElementById('startScreen');
+  const content = document.getElementById('content');
+  const startBtn = document.getElementById('startBtn');
+  const messageBox = document.getElementById('message');
+
+  startBtn.onclick = () => {
+    startScreen.style.display = 'none';
+    content.style.display = 'flex';
+    typeWriter(message, 0);
+    setInterval(() => createFallingHeart(), 3000 + Math.random() * 2000);
+  };
+
+  function typeWriter(text, i) {
+    if (i < text.length) {
+      messageBox.innerHTML += text.charAt(i);
+      setTimeout(() => typeWriter(text, i + 1), 50);
+    }
+  }
+
+  const colors = ['#ff69b4', '#ff1493', '#ffa07a', '#ff4500', '#8a2be2', '#1e90ff', '#ffff66'];
+
+  function createFallingHeart() {
+    const tree = document.getElementById('heartTree');
+    const container = document.getElementById('treeContainer');
+    const rect = tree.getBoundingClientRect();
+
+    const heart = document.createElement('div');
+    heart.className = 'fallingHeart';
+    heart.textContent = '♥';
+    heart.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 100}px`;
+    heart.style.top = `${rect.top + rect.height / 3}px`;
+    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+    heart.style.fontSize = `${14 + Math.random() * 10}px`;
+
+    document.body.appendChild(heart);
+
+    heart.addEventListener('animationend', () => {
+      heart.remove();
+    });
+  }
 </script>
 
 </body>
