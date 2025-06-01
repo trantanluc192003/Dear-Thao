@@ -74,20 +74,8 @@
 
     .fallingHeart {
       position: absolute;
-      font-size: 18px;
-      animation: fall 4s linear forwards;
       pointer-events: none;
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translate(0, 0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(-300px, 600px) rotate(360deg);
-        opacity: 0;
-      }
+      user-select: none;
     }
   </style>
 </head>
@@ -144,16 +132,32 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     const heart = document.createElement('div');
     heart.className = 'fallingHeart';
     heart.textContent = '♥';
-    heart.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 100}px`;
-    heart.style.top = `${rect.top + rect.height / 3 + Math.random() * 50}px`;
+
+    // Vị trí bắt đầu gần gốc cây
+    const startX = rect.left + rect.width / 2 + (Math.random() - 0.5) * 100;
+    const startY = rect.top + rect.height / 3 + Math.random() * 50;
+
+    // Lệch bay sang trái (gió)
+    const driftX = -200 + Math.random() * -100;
+    const fallY = 600 + Math.random() * 100;
+
+    heart.style.left = `${startX}px`;
+    heart.style.top = `${startY}px`;
     heart.style.color = colors[Math.floor(Math.random() * colors.length)];
     heart.style.fontSize = `${40 + Math.random() * 20}px`;
 
-    document.body.appendChild(heart);
-
-    heart.addEventListener('animationend', () => {
-      heart.remove();
+    // Hiệu ứng bay chéo
+    heart.animate([
+      { transform: 'translate(0, 0)', opacity: 1 },
+      { transform: `translate(${driftX}px, ${fallY}px)`, opacity: 0 }
+    ], {
+      duration: 4000,
+      easing: 'linear',
+      fill: 'forwards'
     });
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 4000);
   }
 </script>
 
