@@ -1,139 +1,192 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Dear Thảo</title>
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      padding: 0;
-      background-color: #ffeef2;
+      background: #fffaf0;
       font-family: 'Courier New', monospace;
-      color: #d63384;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .container {
-      position: relative;
-      z-index: 1;
-      max-width: 600px;
-      margin: 100px auto;
-      padding: 20px;
-      background: #fff0f5;
-      border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
       text-align: center;
+      overflow: hidden;
     }
-
-    h1 {
-      font-size: 2em;
+    #intro {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: #fffaf0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    #intro img {
+      width: 200px;
       margin-bottom: 20px;
-      color: #ff4081;
+      animation: pulse 2s infinite;
     }
-
-    .message {
-      font-size: 1.2em;
-      white-space: pre-wrap;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
-
-    #heartCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #ff6fa0;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #treeCanvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 0;
+    }
+    #message {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 600px;
+      font-size: 1.2rem;
+      color: #d63384;
+      white-space: pre-wrap;
+      z-index: 5;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Gửi Thảo 💌</h1>
-    <p class="message">
-Thảo à,
 
-Có thể những dòng này hơi bất ngờ, nhưng thật lòng mình đã thích cậu từ lâu rồi.
-Cậu luôn xuất hiện với nụ cười dịu dàng, ánh mắt ấm áp và một sự tinh tế khiến mình không thể ngừng nghĩ về cậu.
+<div id="intro">
+  <img src="tim.png" alt="heart">
+  <button id="startBtn">Click here</button>
+</div>
 
-Mình không biết cậu sẽ cảm thấy thế nào khi đọc những dòng này,
-nhưng nếu có một cơ hội, mình muốn được cùng cậu đi chung một đoạn đường – dù là xa hay gần, mình cũng muốn thử.
+<canvas id="treeCanvas"></canvas>
+<div id="message"></div>
 
-Thảo, cậu có muốn... làm người yêu mình không?
+<script>
+  const intro = document.getElementById('intro');
+  const messageEl = document.getElementById('message');
+  const canvas = document.getElementById('treeCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
 
-Dù câu trả lời là gì, cảm ơn cậu vì đã đọc đến đây.
-    </p>
-  </div>
-  <canvas id="heartCanvas"></canvas>
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
 
-  <script>
-    const canvas = document.getElementById('heartCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let hearts = [];
-
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+  const hearts = [];
+  class Heart {
+    constructor() {
+      this.reset();
     }
-
-    window.addEventListener('resize', resize);
-    resize();
-
-    function Heart() {
+    reset() {
       this.x = Math.random() * width;
       this.y = Math.random() * -height;
-      this.size = 10 + Math.random() * 20;
+      this.size = 10 + Math.random() * 10;
       this.speed = 1 + Math.random() * 2;
-      this.alpha = 0.5 + Math.random() * 0.5;
+      this.alpha = 0.6 + Math.random() * 0.4;
+      this.color = `hsl(${Math.random()*360}, 100%, 70%)`;
       this.angle = Math.random() * 2 * Math.PI;
-      this.spin = (Math.random() - 0.5) * 0.2;
     }
-
-    Heart.prototype.update = function() {
+    update() {
       this.y += this.speed;
-      this.angle += this.spin;
-      if (this.y > height) {
-        this.y = -this.size;
-        this.x = Math.random() * width;
-      }
-    };
-
-    Heart.prototype.draw = function(ctx) {
+      if (this.y > height) this.reset();
+    }
+    draw(ctx) {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
       ctx.globalAlpha = this.alpha;
-      ctx.fillStyle = '#ff69b4';
+      ctx.fillStyle = this.color;
       ctx.beginPath();
+      const s = this.size;
       ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(0, -this.size / 2, -this.size, -this.size / 2, -this.size, 0);
-      ctx.bezierCurveTo(-this.size, this.size / 2, 0, this.size, 0, this.size * 1.5);
-      ctx.bezierCurveTo(0, this.size, this.size, this.size / 2, this.size, 0);
-      ctx.bezierCurveTo(this.size, -this.size / 2, 0, -this.size / 2, 0, 0);
+      ctx.bezierCurveTo(0, -s/2, -s, -s/2, -s, 0);
+      ctx.bezierCurveTo(-s, s/2, 0, s, 0, s*1.5);
+      ctx.bezierCurveTo(0, s, s, s/2, s, 0);
+      ctx.bezierCurveTo(s, -s/2, 0, -s/2, 0, 0);
       ctx.fill();
       ctx.restore();
-    };
-
-    function initHearts(count) {
-      hearts = [];
-      for (let i = 0; i < count; i++) {
-        hearts.push(new Heart());
-      }
     }
+  }
 
-    function animate() {
-      ctx.clearRect(0, 0, width, height);
-      for (let heart of hearts) {
-        heart.update();
-        heart.draw(ctx);
-      }
-      requestAnimationFrame(animate);
+  for (let i = 0; i < 100; i++) hearts.push(new Heart());
+
+  function drawTree() {
+    ctx.save();
+    ctx.translate(width / 2, height);
+    ctx.fillStyle = "#3e2723";
+    ctx.beginPath();
+    ctx.moveTo(-10, 0);
+    ctx.lineTo(-5, -150);
+    ctx.lineTo(5, -150);
+    ctx.lineTo(10, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    // Draw heart leaves
+    for (let i = 0; i < 150; i++) {
+      const x = (Math.random() - 0.5) * 300;
+      const y = -150 + (Math.random() - 1) * 150;
+      const size = 10 + Math.random() * 10;
+      const angle = Math.random() * 2 * Math.PI;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = `hsl(${Math.random()*360}, 100%, 75%)`;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -size/2, -size, -size/2, -size, 0);
+      ctx.bezierCurveTo(-size, size/2, 0, size, 0, size * 1.5);
+      ctx.bezierCurveTo(0, size, size, size/2, size, 0);
+      ctx.bezierCurveTo(size, -size/2, 0, -size/2, 0, 0);
+      ctx.fill();
+      ctx.restore();
     }
+    ctx.restore();
+  }
 
-    initHearts(100);
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    drawTree();
+    for (let h of hearts) {
+      h.update();
+      h.draw(ctx);
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function typeWriter(text, i = 0) {
+    if (i < text.length) {
+      messageEl.innerHTML += text.charAt(i);
+      setTimeout(() => typeWriter(text, i + 1), 40);
+    }
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => {
+    intro.style.display = 'none';
     animate();
-  </script>
+    const msg = `Thảo à,
+
+Tớ có một điều muốn nói với cậu từ rất lâu rồi...
+Tớ thích cậu — không phải một chút, mà là rất rất nhiều.
+
+Mỗi lần thấy cậu cười, tớ lại thấy tim mình đập nhanh hơn.
+Tớ không biết tương lai thế nào, nhưng tớ muốn cùng cậu tạo nên nó.
+
+Thảo, cậu có muốn làm người yêu tớ không? 💗`;
+    setTimeout(() => typeWriter(msg), 2000);
+  });
+</script>
+
 </body>
 </html>
