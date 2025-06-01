@@ -115,7 +115,12 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     startScreen.style.display = 'none';
     content.style.display = 'flex';
     typeWriter(message, 0);
-    setInterval(() => createFallingHeart(), 1500 + Math.random() * 1500);
+    setInterval(() => {
+        const count = Math.floor(Math.random() * 3) + 1; // từ 1 đến 3
+        for (let i = 0; i < count; i++) {
+            createFallingHeart();
+        }
+    }, 1500 + Math.random() * 1500);
   };
 
   function typeWriter(text, i) {
