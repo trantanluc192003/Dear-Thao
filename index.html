@@ -25,6 +25,11 @@
     #startScreen img {
       width: 200px;
       margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
     #startBtn {
       padding: 10px 20px;
@@ -51,6 +56,7 @@
       color: deeppink;
       white-space: pre-line;
       font-size: 20px;
+      z-index: 1;
     }
 
     #treeContainer {
@@ -59,22 +65,29 @@
       display: flex;
       align-items: end;
       justify-content: end;
+      z-index: 0;
     }
 
     #heartTree {
       height: 80vh;
-      z-index: 1;
     }
 
     .fallingHeart {
       position: absolute;
       font-size: 18px;
       animation: fall 4s linear forwards;
+      pointer-events: none;
     }
 
     @keyframes fall {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(600px); opacity: 0; }
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-300px, 600px) rotate(360deg);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -108,35 +121,33 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
   const content = document.getElementById('content');
   const startBtn = document.getElementById('startBtn');
   const messageBox = document.getElementById('message');
+  const heartTree = document.getElementById('heartTree');
 
   startBtn.onclick = () => {
     startScreen.style.display = 'none';
     content.style.display = 'flex';
     typeWriter(message, 0);
-    setInterval(() => createFallingHeart(), 3000 + Math.random() * 2000);
+    setInterval(() => createFallingHeart(), 1500 + Math.random() * 1500);
   };
 
   function typeWriter(text, i) {
     if (i < text.length) {
       messageBox.innerHTML += text.charAt(i);
-      setTimeout(() => typeWriter(text, i + 1), 50);
+      setTimeout(() => typeWriter(text, i + 1), 40);
     }
   }
 
   const colors = ['#ff69b4', '#ff1493', '#ffa07a', '#ff4500', '#8a2be2', '#1e90ff', '#ffff66'];
 
   function createFallingHeart() {
-    const tree = document.getElementById('heartTree');
-    const container = document.getElementById('treeContainer');
-    const rect = tree.getBoundingClientRect();
-
+    const rect = heartTree.getBoundingClientRect();
     const heart = document.createElement('div');
     heart.className = 'fallingHeart';
     heart.textContent = '♥';
     heart.style.left = `${rect.left + rect.width / 2 + (Math.random() - 0.5) * 100}px`;
-    heart.style.top = `${rect.top + rect.height / 3}px`;
+    heart.style.top = `${rect.top + rect.height / 3 + Math.random() * 50}px`;
     heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-    heart.style.fontSize = `${14 + Math.random() * 10}px`;
+    heart.style.fontSize = `${18 + Math.random() * 12}px`;
 
     document.body.appendChild(heart);
 
