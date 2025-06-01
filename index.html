@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dear Thảo</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffeef2;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #ff4081;
+    }
+
+    .message {
+      font-size: 1.2em;
+      white-space: pre-wrap;
+    }
+
+    #heartCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gửi Thảo 💌</h1>
+    <p class="message">
+Thảo à,
+
+Có thể những dòng này hơi bất ngờ, nhưng thật lòng mình đã thích cậu từ lâu rồi.
+Cậu luôn xuất hiện với nụ cười dịu dàng, ánh mắt ấm áp và một sự tinh tế khiến mình không thể ngừng nghĩ về cậu.
+
+Mình không biết cậu sẽ cảm thấy thế nào khi đọc những dòng này,
+nhưng nếu có một cơ hội, mình muốn được cùng cậu đi chung một đoạn đường – dù là xa hay gần, mình cũng muốn thử.
+
+Thảo, cậu có muốn... làm người yêu mình không?
+
+Dù câu trả lời là gì, cảm ơn cậu vì đã đọc đến đây.
+    </p>
+  </div>
+  <canvas id="heartCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('heartCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let hearts = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    function Heart() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * -height;
+      this.size = 10 + Math.random() * 20;
+      this.speed = 1 + Math.random() * 2;
+      this.alpha = 0.5 + Math.random() * 0.5;
+      this.angle = Math.random() * 2 * Math.PI;
+      this.spin = (Math.random() - 0.5) * 0.2;
+    }
+
+    Heart.prototype.update = function() {
+      this.y += this.speed;
+      this.angle += this.spin;
+      if (this.y > height) {
+        this.y = -this.size;
+        this.x = Math.random() * width;
+      }
+    };
+
+    Heart.prototype.draw = function(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = '#ff69b4';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -this.size / 2, -this.size, -this.size / 2, -this.size, 0);
+      ctx.bezierCurveTo(-this.size, this.size / 2, 0, this.size, 0, this.size * 1.5);
+      ctx.bezierCurveTo(0, this.size, this.size, this.size / 2, this.size, 0);
+      ctx.bezierCurveTo(this.size, -this.size / 2, 0, -this.size / 2, 0, 0);
+      ctx.fill();
+      ctx.restore();
+    };
+
+    function initHearts(count) {
+      hearts = [];
+      for (let i = 0; i < count; i++) {
+        hearts.push(new Heart());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let heart of hearts) {
+        heart.update();
+        heart.draw(ctx);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    initHearts(100);
+    animate();
+  </script>
+</body>
+</html>
