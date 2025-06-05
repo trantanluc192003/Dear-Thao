@@ -102,6 +102,24 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
+
+    .paperPlane {
+      position: absolute;
+      width: 60px;
+      z-index: 2;
+      animation: fly 4s linear forwards;
+    }
+
+    @keyframes fly {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(400px, -200px) rotate(20deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -145,11 +163,15 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     content.style.display = 'flex';
     typeWriterWithPause(messageBox, message);
     setInterval(() => {
-      const count = Math.floor(Math.random() * 2) + 1; // 1–2 tim mỗi lần
+      const count = Math.floor(Math.random() * 2) + 1;
       for (let i = 0; i < count; i++) {
         createFallingHeart();
       }
     }, 3000 + Math.random() * 2000);
+
+    setInterval(() => {
+      launchPaperPlane();
+    }, 10000); // mỗi 10 giây
   };
 
   function typeWriterWithPause(element, text, i = 0) {
@@ -167,7 +189,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     } else {
       element.innerHTML = text;
       setTimeout(() => {
-        bgMusic.volume = 0.3;  // Giảm âm lượng
+        bgMusic.volume = 0.3;
         bgMusic.play();
       }, 5000);
     }
@@ -188,6 +210,18 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     document.body.appendChild(heart);
 
     setTimeout(() => heart.remove(), 6000);
+  }
+
+  function launchPaperPlane() {
+    const rect = heartTree.getBoundingClientRect();
+    const plane = document.createElement('img');
+    plane.src = 'mbg.png';
+    plane.className = 'paperPlane';
+    plane.style.left = `${rect.left + rect.width * 0.3}px`;
+    plane.style.top = `${rect.top}px`;
+
+    document.body.appendChild(plane);
+    setTimeout(() => plane.remove(), 4000); // sau khi animation xong
   }
 </script>
 
