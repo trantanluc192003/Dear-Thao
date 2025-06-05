@@ -78,8 +78,18 @@
       user-select: none;
       width: 40px;
       height: 40px;
-      object-fit: contain;
-      z-index: 100;
+      animation: fall 6s linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-200px, 700px) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .cursor {
@@ -96,8 +106,8 @@
 </head>
 <body>
 
-<!-- Nhạc ẩn -->
-<audio id="bgMusic" src="nhac.mp3"></audio>
+<!-- Nhạc nền -->
+<audio id="bgMusic" src="nhac.mp3" loop></audio>
 
 <div id="startScreen">
   <img src="tim.png" alt="Heart">
@@ -135,11 +145,11 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     content.style.display = 'flex';
     typeWriterWithPause(messageBox, message);
     setInterval(() => {
-      const count = Math.floor(Math.random() * 3) + 1;
+      const count = Math.floor(Math.random() * 2) + 1; // 1–2 tim mỗi lần
       for (let i = 0; i < count; i++) {
         createFallingHeart();
       }
-    }, 2500 + Math.random() * 2000);
+    }, 3000 + Math.random() * 2000);
   };
 
   function typeWriterWithPause(element, text, i = 0) {
@@ -156,8 +166,8 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
       setTimeout(() => typeWriterWithPause(element, text, i + 1), delay);
     } else {
       element.innerHTML = text;
-      // Sau 5 giây kể từ khi gõ xong thì phát nhạc
       setTimeout(() => {
+        bgMusic.volume = 0.3;  // Giảm âm lượng
         bgMusic.play();
       }, 5000);
     }
@@ -166,31 +176,18 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
   function createFallingHeart() {
     const rect = heartTree.getBoundingClientRect();
     const heart = document.createElement('img');
-    heart.className = 'fallingHeart';
     heart.src = 'tym.png';
+    heart.className = 'fallingHeart';
 
     const startX = rect.left + Math.random() * rect.width;
     const startY = rect.top + Math.random() * rect.height;
 
-    const driftX = -200 + Math.random() * -150;
-    const fallY = 600 + Math.random() * 100;
-
     heart.style.left = `${startX}px`;
     heart.style.top = `${startY}px`;
-    heart.style.width = `${40 + Math.random() * 20}px`;
-    heart.style.height = 'auto';
-
-    heart.animate([
-      { transform: 'translate(0, 0)', opacity: 1 },
-      { transform: `translate(${driftX}px, ${fallY}px)`, opacity: 0 }
-    ], {
-      duration: 4000,
-      easing: 'linear',
-      fill: 'forwards'
-    });
 
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
+
+    setTimeout(() => heart.remove(), 6000);
   }
 </script>
 
