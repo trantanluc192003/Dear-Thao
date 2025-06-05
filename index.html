@@ -109,14 +109,6 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0; }
     }
-
-    .plane {
-      position: absolute;
-      width: 60px;
-      height: auto;
-      pointer-events: none;
-      z-index: 2;
-    }
   </style>
 </head>
 <body>
@@ -144,7 +136,7 @@ Thật ra thì trước anh học khóa Gateway trễ, anh học buổi thứ 20
 
 Nhưng thật sự thì anh rất ngại với con gái á, nên anh cũng không dám làm quen với em, sợ em nghĩ anh thế này thế kia. Nhưng rồi cuối khóa Pathway, anh biết là sắp tới không còn cơ hội để gặp em nữa nên anh mới lấy cam đảm mà gửi kết bạn với em với lí do hỏi bài học, thật sự lúc nhấn gửi mà anh run lắm luôn. Lúc em accept thì anh rất vui, nhưng anh nói thật anh chưa từng quen ai trước đây, nên anh cũng không biết bắt chuyện với con gái thế nào, anh muốn nhắn tin trò chuyện với em nhưng trong đầu anh lại không biết nên nhắn gì, bản thân anh thuộc kiểu người gọi là sao ta, như kiểu goodboy á, anh ít nói lắm, lời lẻ cũng nhạt, thường anh hay quan tâm những người quanh anh bằng hành động hơn
 
-Có những lần anh nhắn tin cho em, em chỉ seen không có rep lại, anh cũng hơi buồn, nhưng anh sợ hơn là buồn, sợ em nghĩ anh phiền thế này thế kia. 
+Có những lần anh nhắn tin cho em, em chỉ seen không có rep lại, anh cũng thấy hơi buồn, nhưng anh sợ hơn là buồn, sợ em nghĩ anh phiền thế này thế kia hơn. 
 
 Hôm nay anh viết những lời này để muốn nói cho em biết về tình cảm của anh, anh thật sự rất thích em, dù chưa biết gì nhiều về em, nhưng qua sự giản dị tự nhiên và cách nói chuyện thì anh thấy em là người mà không nên bỏ lỡ nếu có cơ hội, anh nói những lời này ra để cho em biết về tình cảm của anh, anh hi vọng em có thể cho anh một cơ hội để tìm hiểu hơn về em, và em cũng sẽ hiểu về anh, anh sẽ làm những điều tốt nhất anh có thể, em cứ suy nghĩ nhé, nếu em đồng ý cho anh một cơ hội thì hãy nhắn gì đó qua Zalo cho anh biết nhé, còn nếu em không đồng ý thì em chỉ cần xem thôi không cần trả lời gì cả, anh sẽ hiểu và không làm phiền em nữa đâu. 
 
@@ -174,13 +166,6 @@ Thật sự thì hôm nay anh đã lấy hết can đảm để nói ra tình c�
         createFallingHeart();
       }
     }, 3000 + Math.random() * 2000);
-
-    setInterval(() => {
-      const count = Math.floor(Math.random() * 2) + 1;
-      for (let i = 0; i < count; i++) {
-        createFlyingPlane();
-      }
-    }, 7000);
   };
 
   function typeWriterWithPause(element, text, i = 0) {
@@ -216,32 +201,6 @@ Thật sự thì hôm nay anh đã lấy hết can đảm để nói ra tình c�
     document.body.appendChild(heart);
 
     setTimeout(() => heart.remove(), 7000);
-  }
-
-  function createFlyingPlane() {
-    const rect = heartTree.getBoundingClientRect();
-    const plane = document.createElement('img');
-    plane.src = 'mbg.png';
-    plane.className = 'plane';
-
-    const startX = rect.left + rect.width / 2 - 30;
-    const startY = rect.top - 50;
-
-    plane.style.left = `${startX}px`;
-    plane.style.top = `${startY}px`;
-
-    document.body.appendChild(plane);
-
-    plane.animate([
-      { transform: 'translate(0, 0)', opacity: 1 },
-      { transform: 'translate(300px, -100px)', opacity: 0 }
-    ], {
-      duration: 4000,
-      easing: 'ease-in-out',
-      fill: 'forwards'
-    });
-
-    setTimeout(() => plane.remove(), 4500);
   }
 </script>
 
