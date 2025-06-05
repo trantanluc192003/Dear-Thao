@@ -143,12 +143,14 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
   startBtn.onclick = () => {
     startScreen.style.display = 'none';
     content.style.display = 'flex';
-    typeWriterWithPause(messageBox, message, () => {
-      setTimeout(() => {
-        bgMusic.volume = 0.3;
-        bgMusic.play();
-      }, 5000);
-    });
+    typeWriterWithPause(messageBox, message);
+
+    // Phát nhạc sau 10 giây kể từ lúc bắt đầu gõ
+    setTimeout(() => {
+      bgMusic.volume = 0.3;
+      bgMusic.play();
+    }, 10000);
+
     setInterval(() => {
       const count = Math.floor(Math.random() * 2) + 1;
       for (let i = 0; i < count; i++) {
@@ -164,7 +166,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     }, 7000);
   };
 
-  function typeWriterWithPause(element, text, callback, i = 0) {
+  function typeWriterWithPause(element, text, i = 0) {
     if (i <= text.length) {
       element.innerHTML = text.substring(0, i) + '<span class="cursor">|</span>';
       const char = text.charAt(i - 1);
@@ -175,10 +177,9 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
       else if (char === '\n') delay = 600 + Math.random() * 300;
       else if (char === '?') delay = 800 + Math.random() * 400;
 
-      setTimeout(() => typeWriterWithPause(element, text, callback, i + 1), delay);
+      setTimeout(() => typeWriterWithPause(element, text, i + 1), delay);
     } else {
       element.innerHTML = text;
-      if (callback) callback();
     }
   }
 
