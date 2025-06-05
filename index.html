@@ -51,7 +51,7 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      flex-wrap: nowrap; /* Giữ 2 bên cố định */
+      flex-wrap: nowrap;
       overflow: hidden;
     }
 
@@ -85,6 +85,18 @@
       user-select: none;
       width: 40px;
       height: 40px;
+      animation: fallAndSpin 6s ease-in-out forwards;
+    }
+
+    @keyframes fallAndSpin {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-150px, 600px) rotate(720deg);
+        opacity: 0;
+      }
     }
 
     .cursor {
@@ -111,7 +123,7 @@
 
 <div id="startScreen">
   <img src="tim.png" alt="Heart" />
-  <button id="startBtn">Em click vào đây nhé, tí cuộn xuống để xem hết nội dung</button>
+  <button id="startBtn">Em click vào đây nhé</button>
 </div>
 
 <div id="content">
@@ -197,23 +209,13 @@ Thật sự thì hôm nay anh đã lấy hết can đảm để nói ra tình c�
 
     const startX = rect.left + Math.random() * rect.width;
     const startY = rect.top + Math.random() * rect.height;
-    const driftX = -200 + Math.random() * -100;
-    const fallY = 500 + Math.random() * 100;
 
     heart.style.left = `${startX}px`;
     heart.style.top = `${startY}px`;
 
-    heart.animate([
-      { transform: 'translate(0, 0)', opacity: 1 },
-      { transform: `translate(${driftX}px, ${fallY}px)`, opacity: 0 }
-    ], {
-      duration: 6000,
-      easing: 'ease-in-out',
-      fill: 'forwards'
-    });
-
     document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
+
+    setTimeout(() => heart.remove(), 7000);
   }
 
   function createFlyingPlane() {
