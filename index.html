@@ -96,6 +96,9 @@
 </head>
 <body>
 
+<!-- Nhạc ẩn -->
+<audio id="bgMusic" src="nhac.mp3"></audio>
+
 <div id="startScreen">
   <img src="tim.png" alt="Heart">
   <button id="startBtn">Click here</button>
@@ -125,6 +128,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
   const startBtn = document.getElementById('startBtn');
   const messageBox = document.getElementById('message');
   const heartTree = document.getElementById('heartTree');
+  const bgMusic = document.getElementById('bgMusic');
 
   startBtn.onclick = () => {
     startScreen.style.display = 'none';
@@ -152,6 +156,10 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
       setTimeout(() => typeWriterWithPause(element, text, i + 1), delay);
     } else {
       element.innerHTML = text;
+      // Sau 5 giây kể từ khi gõ xong thì phát nhạc
+      setTimeout(() => {
+        bgMusic.play();
+      }, 5000);
     }
   }
 
