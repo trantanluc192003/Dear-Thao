@@ -188,12 +188,25 @@ Thật sự thì hôm nay anh đã lấy hết can đảm để nói ra tình c�
 
   function createFallingHeart() {
     const rect = heartTree.getBoundingClientRect();
+    
     const heart = document.createElement('img');
     heart.src = 'tym.png';
     heart.className = 'fallingHeart';
 
-    const startX = rect.left + Math.random() * rect.width;
-    const startY = rect.top + Math.random() * rect.height;
+    // Tạo điểm rơi trong elip giữa tán cây
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height * 0.35; // Tán cây chiếm khoảng 60% trên
+    const radiusX = rect.width * 0.45; // độ rộng tán cây
+    const radiusY = rect.height * 0.3; // độ cao tán cây
+
+    let xOffset, yOffset;
+    do {
+      xOffset = (Math.random() * 2 - 1) * radiusX;
+      yOffset = (Math.random() * 2 - 1) * radiusY;
+    } while ((xOffset ** 2) / (radiusX ** 2) + (yOffset ** 2) / (radiusY ** 2) > 1); // đảm bảo trong elip
+
+    const startX = centerX + xOffset;
+    const startY = centerY + yOffset;
 
     heart.style.left = `${startX}px`;
     heart.style.top = `${startY}px`;
@@ -202,6 +215,7 @@ Thật sự thì hôm nay anh đã lấy hết can đảm để nói ra tình c�
 
     setTimeout(() => heart.remove(), 7000);
   }
+
 </script>
 
 </body>
