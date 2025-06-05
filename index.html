@@ -11,6 +11,7 @@
       font-family: 'Courier New', Courier, monospace;
       overflow: hidden;
     }
+
     #startScreen {
       position: fixed;
       width: 100vw;
@@ -22,15 +23,18 @@
       flex-direction: column;
       z-index: 10;
     }
+
     #startScreen img {
       width: 200px;
       margin-bottom: 20px;
       animation: pulse 2s infinite;
     }
+
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
     }
+
     #startBtn {
       padding: 10px 20px;
       font-size: 18px;
@@ -65,11 +69,12 @@
       display: flex;
       align-items: end;
       justify-content: end;
+      padding-bottom: 30px; /* Hạ thấp cây tim */
       z-index: 0;
     }
 
     #heartTree {
-      height: 80vh;
+      height: 75vh;
     }
 
     .fallingHeart {
@@ -105,7 +110,7 @@
 
     .paperPlane {
       position: absolute;
-      width: 60px;
+      width: 80px; /* to hơn */
       z-index: 2;
       animation: fly 4s linear forwards;
     }
@@ -116,7 +121,7 @@
         opacity: 1;
       }
       100% {
-        transform: translate(400px, -200px) rotate(20deg);
+        transform: translate(500px, -250px) rotate(20deg);
         opacity: 0;
       }
     }
@@ -124,7 +129,6 @@
 </head>
 <body>
 
-<!-- Nhạc nền -->
 <audio id="bgMusic" src="nhac.mp3" loop></audio>
 
 <div id="startScreen">
@@ -162,16 +166,16 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     startScreen.style.display = 'none';
     content.style.display = 'flex';
     typeWriterWithPause(messageBox, message);
+
     setInterval(() => {
       const count = Math.floor(Math.random() * 2) + 1;
-      for (let i = 0; i < count; i++) {
-        createFallingHeart();
-      }
+      for (let i = 0; i < count; i++) createFallingHeart();
     }, 3000 + Math.random() * 2000);
 
     setInterval(() => {
-      launchPaperPlane();
-    }, 10000); // mỗi 10 giây
+      const planeCount = Math.floor(Math.random() * 2) + 1;
+      for (let i = 0; i < planeCount; i++) launchPaperPlane();
+    }, 7000); // mỗi 7 giây
   };
 
   function typeWriterWithPause(element, text, i = 0) {
@@ -189,7 +193,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     } else {
       element.innerHTML = text;
       setTimeout(() => {
-        bgMusic.volume = 0.35;
+        bgMusic.volume = 0.3;
         bgMusic.play();
       }, 5000);
     }
@@ -208,7 +212,6 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     heart.style.top = `${startY}px`;
 
     document.body.appendChild(heart);
-
     setTimeout(() => heart.remove(), 6000);
   }
 
@@ -221,7 +224,7 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
     plane.style.top = `${rect.top}px`;
 
     document.body.appendChild(plane);
-    setTimeout(() => plane.remove(), 4000); // sau khi animation xong
+    setTimeout(() => plane.remove(), 4000);
   }
 </script>
 
