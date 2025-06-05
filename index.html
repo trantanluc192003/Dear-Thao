@@ -76,6 +76,10 @@
       position: absolute;
       pointer-events: none;
       user-select: none;
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      z-index: 100;
     }
 
     .cursor {
@@ -147,17 +151,15 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
 
       setTimeout(() => typeWriterWithPause(element, text, i + 1), delay);
     } else {
-      element.innerHTML = text; // Xoá con trỏ sau khi gõ xong
+      element.innerHTML = text;
     }
   }
 
-  const colors = ['#ff69b4', '#ff1493', '#ffa07a', '#ff4500', '#8a2be2', '#1e90ff', '#ffff66'];
-
   function createFallingHeart() {
     const rect = heartTree.getBoundingClientRect();
-    const heart = document.createElement('div');
+    const heart = document.createElement('img');
     heart.className = 'fallingHeart';
-    heart.textContent = '♥';
+    heart.src = 'tym.png';
 
     const startX = rect.left + Math.random() * rect.width;
     const startY = rect.top + Math.random() * rect.height;
@@ -167,8 +169,8 @@ Cậu đồng ý làm người yêu tớ nhé? 💗`;
 
     heart.style.left = `${startX}px`;
     heart.style.top = `${startY}px`;
-    heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-    heart.style.fontSize = `${40 + Math.random() * 20}px`;
+    heart.style.width = `${40 + Math.random() * 20}px`;
+    heart.style.height = 'auto';
 
     heart.animate([
       { transform: 'translate(0, 0)', opacity: 1 },
