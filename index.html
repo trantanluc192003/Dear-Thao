@@ -108,7 +108,7 @@
     .cursor {
       display: inline-block;
       width: 14px;
-      height: 2px;
+      height: 1px;
       background-color: deeppink;
       margin-left: 2px;
       animation: blink 1s step-end infinite;
@@ -182,7 +182,7 @@ Thật sự thì anh run quá không dám nhắn tin nên mới dùng cách này
 
   function typeWriterWithPause(element, text, i = 0) {
     if (i <= text.length) {
-      element.innerHTML = `<div>${text.substring(0, i)}<span class="cursor"></span></div>`;
+      element.innerHTML = `<div>${text.substring(0, i)}<span class="cursor">|</span></div>`;
       element.scrollTop = element.scrollHeight;
       const char = text.charAt(i - 1);
       let delay = 80;
