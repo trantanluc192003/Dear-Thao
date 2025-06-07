@@ -108,7 +108,7 @@
     .cursor {
       display: inline-block;
       width: 10px;
-      animation: blink 2s step-end infinite;
+      animation: blink 3s step-end infinite;
     }
 
     @keyframes blink {
@@ -166,7 +166,7 @@ Thật sự thì anh run quá nên mới dùng cách này để gửi những l�
     setTimeout(() => {
       bgMusic.volume = 0.3;
       bgMusic.play();
-    }, 10000);
+    }, 15000);
 
     setInterval(() => {
       const count = Math.floor(Math.random() * 2) + 1;
@@ -178,7 +178,7 @@ Thật sự thì anh run quá nên mới dùng cách này để gửi những l�
 
   function typeWriterWithPause(element, text, i = 0) {
     if (i <= text.length) {
-      element.innerHTML = `<div>${text.substring(0, i)}<span class="cursor">|</span></div>`;
+      element.innerHTML = `<div>${text.substring(0, i)}<span class="cursor">_</span></div>`;
       element.scrollTop = element.scrollHeight;
       const char = text.charAt(i - 1);
       let delay = 80;
