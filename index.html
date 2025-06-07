@@ -108,12 +108,12 @@
     .cursor {
       display: inline-block;
       width: 10px;
-      animation: blink 1s step-end infinite;
+      animation: blink 2s step-end infinite;
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      0%,80%, 100% { opacity: 1; }
+      40% { opacity: 0; }
     }
   </style>
 </head>
@@ -181,7 +181,7 @@ Thật sự thì anh run quá nên mới dùng cách này để gửi những l�
       element.innerHTML = `<div>${text.substring(0, i)}<span class="cursor">|</span></div>`;
       element.scrollTop = element.scrollHeight;
       const char = text.charAt(i - 1);
-      let delay = 50;
+      let delay = 70;
 
       if (char === ',' || char === '…') delay = 500 + Math.random() * 300;
       else if (char === '.') delay = 700 + Math.random() * 400;
