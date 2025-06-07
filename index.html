@@ -63,11 +63,11 @@
       font-size: 20px;
       overflow-y: auto;
       box-sizing: border-box;
-      direction: rtl;
+      direction: rtl;         
     }
 
     #message * {
-      direction: ltr;
+      direction: ltr;          
       text-align: left;
     }
 
@@ -107,17 +107,13 @@
 
     .cursor {
       display: inline-block;
-      width: 14px;
-      height: 1px;
-      background-color: deeppink;
-      margin-left: 2px;
-      animation: blink 1s step-end infinite;
-      vertical-align: middle;
+      width: 10px;
+      animation: blink 3s step-end infinite;
     }
 
     @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      0%,80%, 100% { opacity: 1; }
+      40% { opacity: 0; }
     }
   </style>
 </head>
@@ -125,7 +121,7 @@
 
 <div id="startScreen">
   <img src="tim.png" alt="Heart" />
-  <button id="startBtn">Thảo ơi, em click vào để đọc nhé</button>
+  <button id="startBtn">Thảo click vào để đọc nhé</button>
 </div>
 
 <div id="content">
@@ -142,7 +138,7 @@
 
 Hôm nay anh có những lời này muốn nói với em……
 
-Thật ra thì trước anh học khóa Gateway trễ, anh học buổi thứ 20 thì phải, và sau buổi 21 cũng là buổi đầu tiên mà anh gặp em, lúc đó tự nhiên anh thấy ở em có điều gì đó thu hút đặc biệt đối với anh, và từ những buổi đi học sau anh bắt đầu để ý đến em, và càng ngày anh càng bị thu hút hơn ở em, thu hút bởi một nét xinh đẹp đơn giản và rất tự nhiên của em, anh thấy em không có tô son, không makeup nhiều nhưng em vẫn xinh một cách giản dị, và thêm nữa anh thấy từ giọng nói đến cách em nói chuyện với mọi người, sự lễ phép đối với thầy thật sự rất dễ thương luôn, em thật sự là mẫu người mà anh thích, từ đó anh bắt đầu cảm thấy thích em rồi. Anh cảm thấy có động lực đi học hơn, đi học được thấy em dù chẳng nói gì, và chắc lúc đó em cũng không biết anh là ai đâu. 
+Thật ra thì trước anh học khóa Gateway trễ, anh học buổi thứ 20 thì phải, và sau buổi 21 cũng là buổi đầu tiên mà anh gặp em, lúc đó tự nhiên anh thấy ở em có điều gì đó thu hút đặc biệt đối với anh, và từ những buổi đi học sau anh bắt đầu để ý đến em, và càng ngày anh càng bị thu hút hơn ở em, thu hút bởi một nét xinh đẹp đơn giản và rất tự nhiên của em, anh thấy em không cần son phấn, không makeup nhiều nhưng em vẫn xinh một cách giản dị, và thêm nữa anh thấy từ giọng nói đến cách em nói chuyện với mọi người, sự lễ phép đối với thầy thật sự rất dễ thương luôn, em thật sự là mẫu người mà anh thích, từ đó anh bắt đầu cảm thấy thích em rồi. Anh cảm thấy có động lực đi học hơn, đi học được thấy em dù chẳng nói gì, và chắc lúc đó em cũng không biết anh là ai đâu. 
 
 Nhưng thật sự thì anh rất ngại với con gái á, nên anh cũng không dám làm quen với em, sợ em nghĩ anh thế này thế kia. Nhưng rồi cuối khóa Pathway, anh biết là sắp tới không còn cơ hội để gặp em nữa nên anh mới lấy cam đảm mà gửi kết bạn với em với lí do hỏi về bài học, thật sự lúc nhấn gửi mà anh run lắm luôn. Lúc được em chấp nhận kết bạn thì anh rất vui luôn á.
 
@@ -152,7 +148,7 @@ Có những lần anh nhắn tin cho em, em chỉ seen không có rep lại, anh
 
 Hôm nay anh viết những lời này để muốn nói cho em biết về tình cảm của anh, anh thật sự rất thích em, dù chưa biết gì nhiều về em, nhưng qua nét giản dị tự nhiên và cách nói chuyện thì anh thấy em là người mà không nên bỏ lỡ nếu có cơ hội, anh nói những lời này ra để cho em biết về tình cảm của mình, anh hi vọng em có thể cho anh một cơ hội để tìm hiểu hơn về em, và em cũng sẽ hiểu về anh, anh sẽ làm những điều tốt nhất anh có thể, em cứ suy nghĩ nhé, nếu em đồng ý cho anh một cơ hội thì hãy nhắn gì đó qua Zalo cho anh biết nhé, còn nếu em không đồng ý thì em chỉ cần xem thôi không cần trả lời gì cả, anh sẽ tự hiểu và không làm phiền em nữa đâu. 
 
-Thật sự thì anh run quá không dám nhắn tin nên mới dùng cách này để gửi những lời mà anh muốn nói đến em, anh muốn nếu lỡ không thành công thì ít ra anh cũng đã can cảm để nói ra tình cảm của mình với người mà anh thích ❤️. 
+Thật sự thì anh run quá không dám nhắn với em nên mới dùng cách này để gửi những lời mà anh muốn nói đến em, anh muốn nếu lỡ không thành công thì ít ra anh cũng đã can cảm để nói ra tình cảm của mình với người mà anh thích ❤️. 
 `;
 
   const startScreen = document.getElementById('startScreen');
